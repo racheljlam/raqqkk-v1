@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rachel Joy Lam — portfolio
 
-## Getting Started
+A freelance portfolio dressed up as a ticket board: the pitch is a user story, services
+and projects are tickets on a kanban board, jobs are sprints, and the contact form is a
+"Create issue" dialog. Next.js (App Router) + Tailwind CSS, deployed on Vercel.
 
-First, run the development server:
+## Editing content
+
+Every word on the page lives in [`src/data/site.ts`](src/data/site.ts). Change it there
+and the page updates; no component edits needed.
+
+- **Contact details**: `site.email` and `site.linkedin`. Empty either one and its link disappears.
+- **Board tickets**: the `board.columns` lists. Each ticket has a number, a type
+  (`story`, `task`, `bug`, `epic`), a title, and optional text, labels, and story points.
+- **Projects**: `photobooth` and `trackr`. Each also has a ticket in `board.columns`;
+  keep the two in step (for example, move Trackr's ticket to "Done" when it ships).
+- **Experience**: `experience.sprints`, one entry per employer, most recent first.
+- **Stack and certifications**: `stack.groups` and `certifications.items`.
+
+Colors are tokens at the top of [`src/app/globals.css`](src/app/globals.css). The dark
+values are listed twice (once for "System", once for an explicit "Dark" choice); keep
+them in sync.
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then open http://localhost:3000.

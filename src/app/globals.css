@@ -1,117 +1,157 @@
 @import "tailwindcss";
 
+/*
+ * Color tokens for the ticket-board look: white page, sunken gray columns,
+ * a single blue for actions, and the three status colors.
+ *
+ * Three modes: "System" (no data-theme attribute, the media query decides),
+ * and "Light" / "Dark" (data-theme on <html>, set by the theme switcher).
+ * The dark values appear twice because CSS cannot share one block between a
+ * media query and an attribute selector; keep the two in sync.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --page: #ffffff;
+  --sunken: #f4f5f7;
+  --card: #ffffff;
+  --line: #dcdfe4;
+  --ink: #172b4d;
+  --soft: #44546f;
+  --faint: #626f86;
+  --brand: #0c66e4;
+  --brand-hover: #0055cc;
+  --brand-ink: #ffffff;
+  --selected: #e9f2ff;
+  --hover: #091e420f;
+  --chip: #ebecf0;
+  --todo: #dcdfe4;
+  --todo-ink: #44546f;
+  --prog: #cce0ff;
+  --prog-ink: #0055cc;
+  --done: #baf3db;
+  --done-ink: #216e4e;
+  --card-shadow: 0 1px 1px #091e4226, 0 0 1px #091e424f;
+  --raised-shadow: 0 8px 24px #091e4226, 0 0 1px #091e424f;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #1d2125;
+    --sunken: #161a1d;
+    --card: #22272b;
+    --line: #38414a;
+    --ink: #c7d1db;
+    --soft: #9fadbc;
+    --faint: #8c9bab;
+    --brand: #579dff;
+    --brand-hover: #85b8ff;
+    --brand-ink: #1d2125;
+    --selected: #1c2b41;
+    --hover: #a1bdd914;
+    --chip: #2c333a;
+    --todo: #2c333a;
+    --todo-ink: #9fadbc;
+    --prog: #09326c;
+    --prog-ink: #85b8ff;
+    --done: #164b35;
+    --done-ink: #7ee2b8;
+    --card-shadow: 0 1px 1px #03040480, 0 0 1px #03040480;
+    --raised-shadow: 0 8px 24px #03040480, 0 0 1px #03040480;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #1d2125;
+  --sunken: #161a1d;
+  --card: #22272b;
+  --line: #38414a;
+  --ink: #c7d1db;
+  --soft: #9fadbc;
+  --faint: #8c9bab;
+  --brand: #579dff;
+  --brand-hover: #85b8ff;
+  --brand-ink: #1d2125;
+  --selected: #1c2b41;
+  --hover: #a1bdd914;
+  --chip: #2c333a;
+  --todo: #2c333a;
+  --todo-ink: #9fadbc;
+  --prog: #09326c;
+  --prog-ink: #85b8ff;
+  --done: #164b35;
+  --done-ink: #7ee2b8;
+  --card-shadow: 0 1px 1px #03040480, 0 0 1px #03040480;
+  --raised-shadow: 0 8px 24px #03040480, 0 0 1px #03040480;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-sunken: var(--sunken);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-soft: var(--soft);
+  --color-faint: var(--faint);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-selected: var(--selected);
+  --color-hover: var(--hover);
+  --color-chip: var(--chip);
+  --color-todo: var(--todo);
+  --color-todo-ink: var(--todo-ink);
+  --color-prog: var(--prog);
+  --color-prog-ink: var(--prog-ink);
+  --color-done: var(--done);
+  --color-done-ink: var(--done-ink);
+
+  /* Issue-type colors stay the same in both themes. */
+  --color-story: #22a06b;
+  --color-task: #1d7afc;
+  --color-bug: #e2483d;
+  --color-epic: #8270db;
+
+  --shadow-card: var(--card-shadow);
+  --shadow-raised: var(--raised-shadow);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
 }
 
-/* Custom animations */
-@keyframes gradient-shift {
-  0%, 100% {
-    transform: translateX(-50%) translateY(-50%);
-  }
-  50% {
-    transform: translateX(-40%) translateY(-60%);
-  }
+::selection {
+  background: var(--brand);
+  color: var(--brand-ink);
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(5deg);
-  }
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
-@keyframes float-delayed {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+/* The tab strip scrolls sideways on phones; hide its scrollbar. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  50% {
-    transform: translateY(15px) rotate(-3deg);
-  }
-}
-
-@keyframes pulse-slow {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1);
-  }
-}
-
-@keyframes gradient-text {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-gradient-shift {
-  animation: gradient-shift 8s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float-delayed 8s ease-in-out infinite;
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
-}
-
-.animate-gradient-text {
-  background-size: 200% 200%;
-  animation: gradient-text 3s ease-in-out infinite;
-}
-
-.animate-blink {
-  animation: blink 1s infinite;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-  opacity: 0;
 }
